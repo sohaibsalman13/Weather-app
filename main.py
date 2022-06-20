@@ -1,28 +1,51 @@
 import requests
-
-# The API key
-api_key = "52d200dd0dee27f8c8351154b9c6032c"
-
-# Getting user input and the URL
-city = input("Enter the city: ")
-weather_data = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=imperial&APPID={api_key}")
+import tkinter as tk
 
 
-# Checking input error
-if weather_data.json()['cod'] == '404':
-    print("Invalid City")
-else:
-    weather = weather_data.json()['weather'][0]['main']
-    humid = weather_data.json()['main']['humidity']
-    temp_f = weather_data.json()['main']['temp']
-    
-    # Converting fahrenheit temp to celcius
-    temp_c = round((temp_f - 32) * 5 / 9)
+def func(canvas):
+    city = textField.get()
+    api = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=52d200dd0dee27f8c8351154b9c6032c"
+    json_data = requests.get(api).json()
 
-    print(f"The weather information for {city} is\n"
-          f"Weather: {weather}\n"
-          f"Temperature: {temp_c}°C\n"
-          f"Humidity: {humid}")
+    weather = json_data['weather'][0]['main']
+    humid = json_data['main']['humidity']
+    temp = int(json_data['main']['temp']-273.15)
+    min_temp = int(json_data['main']['temp_min']-273.15)
+    max_temp = int(json_data['main']['temp_max']-273.15)
+    pressure = json_data['main']['pressure']
+    wind = json_data['wind']['speed']
+
+    final_info = weather + "\n" + str(temp) + "°C"
+    final_data = "\n" + "Max temp: " + str(max_temp) + "\n" \
+                 + "Min temp: " + str(min_temp) + "\n" + "Pressure: " \
+                 + str(pressure) + "\n" + "Humidity: " + str(humid) + "\n" \
+                 + "Wind Speed: " + str(wind)
+
+    L1.config(text = final_info)
+    L2.config(text = final_data)
+
+
+canvas = tk.Tk()
+canvas.geometry("600x500")
+canvas.title("Weather App")
+
+f = ("New Times Roman", 15, "bold",)
+t = ("New Times Roman", 30, "bold")
+
+textField = tk.Entry(canvas, font = t)
+textField.pack(pady = 20)
+textField.focus()
+textField.bind('<Return>', func)
+
+L1 = tk.Label(canvas, font = t)
+L1.pack()
+L2 = tk.Label(canvas, font = f)
+L2.pack()
+
+canvas.mainloop()
+
+
+
 
 
 

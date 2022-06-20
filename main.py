@@ -15,11 +15,13 @@ else:
     weather = weather_data.json()['weather'][0]['main']
     humid = weather_data.json()['main']['humidity']
     temp_f = weather_data.json()['main']['temp']
+    
+    # Converting fahrenheit temp to celcius
     temp_c = round((temp_f - 32) * 5 / 9)
 
     print(f"The weather information for {city} is\n"
           f"Weather: {weather}\n"
-          f"Temperature: {temp_c}\n"
+          f"Temperature: {temp_c}°C\n"
           f"Humidity: {humid}")
 
 
